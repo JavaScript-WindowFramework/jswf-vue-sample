@@ -6,7 +6,7 @@ const config = {
 const rep = process.env.GITHUB_REPOSITORY;
 const routerBase = rep
   ? {
-      baseUrl: rep.substring(rep.lastIndexOf("/")) + "/"
+    publicPath: rep.substring(rep.lastIndexOf("/")) + "/"
     }
   : {};
 module.exports = { ...config, ...routerBase };
