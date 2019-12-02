@@ -24,7 +24,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_BRANCH: 'gh-pages'
-        if: contains(github.ref, 'tags/v')
+        if: contains(github.ref, 'refs/tags')
         run: |
           remote_url=`git remote get-url --push origin`
           remote_url=https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${remote_url#*//}
