@@ -21,9 +21,19 @@ jobs:
       - name: Build
         run: yarn build
       - name: Deploy
-        if: contains(github.ref, 'refs/tags')
-        uses: peaceiris/actions-gh-pages@v2.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ./dist
+          GIT_BRANCH: 'gh-pages'
+        if: contains(github.ref, 'tags/v')
+        run: |
+          remote_url=`git remote get-url --push origin`
+          remote_url=https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${remote_url#*//}
+          cp -r .git dist/
+          cd dist
+          git config --global user.name $GITHUB_ACTOR
+          git config --global user.email ${GITHUB_ACTOR}@git
+          git checkout -b $GIT_BRANCH
+          git remote set-url origin $remote_url
+          git add .
+          git commit -m ${GIT_BRANCH}
+          git push origin $GIT_BRANCH -f
